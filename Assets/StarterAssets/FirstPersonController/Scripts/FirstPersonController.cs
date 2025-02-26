@@ -46,6 +46,7 @@ namespace StarterAssets
 		[Header("Cinemachine")]
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
 		public GameObject CinemachineCameraTarget;
+		public Transform hand;
 		[Tooltip("How far in degrees can you move the camera up")]
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
@@ -64,7 +65,7 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
-	
+
 #if ENABLE_INPUT_SYSTEM
 		private PlayerInput _playerInput;
 #endif
@@ -78,11 +79,11 @@ namespace StarterAssets
 		{
 			get
 			{
-				#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
 				return _playerInput.currentControlScheme == "KeyboardMouse";
-				#else
+#else
 				return false;
-				#endif
+#endif
 			}
 		}
 
@@ -136,7 +137,7 @@ namespace StarterAssets
 			{
 				//Don't multiply mouse input by Time.deltaTime
 				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-				
+
 				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
 				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
@@ -148,6 +149,11 @@ namespace StarterAssets
 
 				// rotate the player left and right
 				transform.Rotate(Vector3.up * _rotationVelocity);
+
+				if (hand != null)
+				{
+					hand.localRotation = Quaternion.Euler(_cinemachineTargetPitch, _rotationVelocity, 0);
+				}
 			}
 		}
 
