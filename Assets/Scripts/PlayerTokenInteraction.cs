@@ -12,15 +12,15 @@ public class PlayerTokenInteraction : MonoBehaviour
     public GameObject interactionPrompt;
     public TextMeshProUGUI promptText;
     
-    private Camera _camera;
-    private TokenController _controller;
+    private Camera playerCamera;
+    private TokenController currentToken;
     
     void Start()
     {
         // Get the player camera (assuming it's a child of the player)
-        _camera = GetComponentInChildren<Camera>();
+        playerCamera = GetComponentInChildren<Camera>();
         
-        if (!_camera)
+        if (!playerCamera)
         {
             Debug.LogError("No camera found as a child of the player object!");
         }
@@ -38,14 +38,24 @@ public class PlayerTokenInteraction : MonoBehaviour
     
     void Update()
     {
-        var ray = new Ray(_camera.transform.position, _camera.transform.forward);
+        var ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out var hit, interactionDistance, tokenLayer))
+        // Clear highlight on previous token if we're not looking at it anymore
+        if (currentToken != null)
+        {
+            currentToken.SetHighlight(false);
+            currentToken = null;
+        }
+
+        if (Physics.Raycast(ray, out hit, interactionDistance, tokenLayer))
         {
             var token = hit.collider.GetComponent<TokenController>();
 
-            if (!token) return;
-            _controller = token;
+            if (!token || !token.isVisible) return;
+            
+            currentToken = token;
+            currentToken.SetHighlight(true);
                 
             if (interactionPrompt)
             {
@@ -53,26 +63,24 @@ public class PlayerTokenInteraction : MonoBehaviour
                     
                 if (promptText)
                 {
-                    promptText.text = $"Press E to collect coin";
+                    promptText.text = $"Press {interactionKey} to collect token";
                 }
             }
                 
-            // Handle door interaction
-            if (!Input.GetKeyDown(interactionKey)) return;
-            if (token.isVisible)
+            // Handle token interaction
+            if (Input.GetKeyDown(interactionKey) && token.isVisible)
             {
                 token.CollectCoin();
-            }
-            else
-            {
-                Debug.Log("This door is locked!");
+                
+                // Hide the prompt when collected
+                if (interactionPrompt)
+                {
+                    interactionPrompt.SetActive(false);
+                }
             }
         }
         else
         {
-            if (!_controller) return;
-            _controller = null;
-                
             if (interactionPrompt)
             {
                 interactionPrompt.SetActive(false);
