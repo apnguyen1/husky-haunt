@@ -17,7 +17,7 @@ public class Collectible : MonoBehaviour
         Collider[] nearbyCoins = Physics.OverlapSphere(transform.position, collectDistance);
         foreach (Collider coin in nearbyCoins)
         {
-            if (coin.CompareTag("Coins"))
+            if (coin.CompareTag("Coin"))
             {
                 coin.gameObject.SetActive(false);
                 coinCount += 1;
@@ -28,7 +28,7 @@ public class Collectible : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         // Check if the object that entered the trigger has the "Coin" tag
-        if (other.CompareTag("Coins"))
+        if (other.CompareTag("Coin"))
         {
             other.gameObject.SetActive(false);
             coinCount += 1;
