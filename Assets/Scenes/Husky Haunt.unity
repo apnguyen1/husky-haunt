@@ -4533,7 +4533,7 @@ PrefabInstance:
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: CinemachineCameraTarget
       value: 
-      objectReference: {fileID: 660566838}
+      objectReference: {fileID: 114953941}
     - target: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_Name
       value: PlayerCapsule
@@ -5313,3 +5313,4 @@ SceneRoots:
   - {fileID: 1924523438}
   - {fileID: 968822335}
   - {fileID: 661905312}
+  - {fileID: 1273932966}
