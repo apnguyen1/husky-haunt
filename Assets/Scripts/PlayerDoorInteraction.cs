@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class PlayerDoorInteraction : MonoBehaviour
 {
@@ -8,12 +6,14 @@ public class PlayerDoorInteraction : MonoBehaviour
     public KeyCode interactionKey = KeyCode.E;
     public LayerMask doorLayer; // Set this to the layer your doors are on
     
-    [Header("UI Elements")]
-    public GameObject interactionPrompt;
-    public TextMeshProUGUI promptText;
+    [Header("Game References")]
+    public GameWinManager winManager;
+    public DoorController entranceDoor; // Reference to the entrance door specifically
     
     private Camera playerCamera;
     private DoorController currentDoor;
+    private TokenManager tokenManager;
+    private InteractionManager interactionManager;
     
     void Start()
     {
@@ -25,14 +25,13 @@ public class PlayerDoorInteraction : MonoBehaviour
             Debug.LogError("No camera found as a child of the player object!");
         }
         
-        // Hide the interaction prompt initially
-        if (interactionPrompt)
+        // Get managers references
+        tokenManager = TokenManager.Instance;
+        interactionManager = InteractionManager.Instance;
+        
+        if (interactionManager == null)
         {
-            interactionPrompt.SetActive(false);
-        }
-        else
-        {
-            Debug.LogWarning("No interaction prompt UI assigned!");
+            Debug.LogError("InteractionManager not found in the scene!");
         }
     }
     
@@ -46,22 +45,55 @@ public class PlayerDoorInteraction : MonoBehaviour
 
             if (!door) return;
             currentDoor = door;
-                
-            if (interactionPrompt)
+            
+            // Check if this is the entrance door and all tokens are collected
+            bool isEntranceDoor = (door == entranceDoor);
+            bool canEscape = isEntranceDoor && tokenManager != null && tokenManager.IsAllTokensCollected();
+            
+            // Show appropriate prompt based on door state
+            if (door.isLocked)
             {
-                interactionPrompt.SetActive(true);
-                    
-                if (promptText)
+                // Handle locked door text
+                if (isEntranceDoor && tokenManager != null && !tokenManager.IsAllTokensCollected())
                 {
-                    var doorState = door.isLocked ? "Locked" : (door.isOpen ? "Close" : "Open");
-                    promptText.text = $"Press E to {doorState} Door";
+                    interactionManager.ShowPrompt("Door is Locked - Find all tokens to unlock");
+                }
+                else
+                {
+                    interactionManager.ShowPrompt("Door is Locked");
                 }
             }
-                
-            // Handle door interaction
-            if (!Input.GetKeyDown(interactionKey)) return;
-            if (!door.isLocked)
+            else if (canEscape)
             {
+                // Special text for escaping
+                interactionManager.ShowPrompt("Press E to Escape");
+            }
+            else
+            {
+                // Standard door open/close text
+                var doorAction = door.isOpen ? "Close" : "Open";
+                interactionManager.ShowPrompt($"Press E to {doorAction} Door");
+            }
+            
+            // Handle door interaction when key is pressed
+            if (!Input.GetKeyDown(interactionKey)) return;
+            
+            // Check if this is the entrance door and player has collected all tokens
+            if (canEscape)
+            {
+                // Trigger the win condition!
+                if (winManager != null)
+                {
+                    winManager.TriggerWin();
+                }
+                else
+                {
+                    Debug.LogError("WinManager reference not set in PlayerDoorInteraction!");
+                }
+            }
+            else if (!door.isLocked)
+            {
+                // Normal door operation
                 door.ToggleDoor();
             }
             else
@@ -71,13 +103,32 @@ public class PlayerDoorInteraction : MonoBehaviour
         }
         else
         {
-            if (!currentDoor) return;
-            currentDoor = null;
-                
-            if (interactionPrompt)
+            if (currentDoor)
             {
-                interactionPrompt.SetActive(false);
+                currentDoor = null;
+                
+                // Only hide prompt if we're not interacting with a token
+                // This check prevents door interaction from hiding token prompts
+                bool hidePrompt = true;
+                
+                // Check if there's a TokenInteraction component and it's not showing a prompt
+                PlayerTokenInteraction tokenInteraction = GetComponent<PlayerTokenInteraction>();
+                if (tokenInteraction != null && tokenInteraction.IsShowingPrompt())
+                {
+                    hidePrompt = false;
+                }
+                
+                if (hidePrompt && interactionManager != null)
+                {
+                    interactionManager.HidePrompt();
+                }
             }
         }
+    }
+    
+    // Method to check if this component is currently showing a prompt
+    public bool IsShowingPrompt()
+    {
+        return currentDoor != null;
     }
 }
