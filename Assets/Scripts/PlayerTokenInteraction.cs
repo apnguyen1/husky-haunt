@@ -1,19 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class PlayerTokenInteraction : MonoBehaviour
 {
-    public float interactionDistance = 3.0f;
+    public float interactionDistance = 2.0f;
     public KeyCode interactionKey = KeyCode.E;
     public LayerMask tokenLayer; // Set this to the layer your tokens are on
     
-    [Header("UI Elements")]
-    public GameObject interactionPrompt;
-    public TextMeshProUGUI promptText;
-    
     private Camera playerCamera;
     private TokenController currentToken;
+    private InteractionManager interactionManager;
+    private bool isShowingPrompt = false;
     
     void Start()
     {
@@ -25,14 +21,11 @@ public class PlayerTokenInteraction : MonoBehaviour
             Debug.LogError("No camera found as a child of the player object!");
         }
         
-        // Hide the interaction prompt initially
-        if (interactionPrompt)
+        interactionManager = InteractionManager.Instance;
+        
+        if (interactionManager == null)
         {
-            interactionPrompt.SetActive(false);
-        }
-        else
-        {
-            Debug.LogWarning("No interaction prompt UI assigned!");
+            Debug.LogError("InteractionManager not found in the scene!");
         }
     }
     
@@ -40,6 +33,9 @@ public class PlayerTokenInteraction : MonoBehaviour
     {
         var ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         RaycastHit hit;
+        
+        // Reset prompt state
+        isShowingPrompt = false;
 
         // Clear highlight on previous token if we're not looking at it anymore
         if (currentToken != null)
@@ -56,15 +52,12 @@ public class PlayerTokenInteraction : MonoBehaviour
             
             currentToken = token;
             currentToken.SetHighlight(true);
-                
-            if (interactionPrompt)
+            
+            // Show interaction prompt
+            if (interactionManager != null)
             {
-                interactionPrompt.SetActive(true);
-                    
-                if (promptText)
-                {
-                    promptText.text = $"Press {interactionKey} to collect token";
-                }
+                interactionManager.ShowPrompt($"Press {interactionKey} to collect token");
+                isShowingPrompt = true;
             }
                 
             // Handle token interaction
@@ -73,18 +66,35 @@ public class PlayerTokenInteraction : MonoBehaviour
                 token.CollectCoin();
                 
                 // Hide the prompt when collected
-                if (interactionPrompt)
+                if (interactionManager != null)
                 {
-                    interactionPrompt.SetActive(false);
+                    interactionManager.HidePrompt();
+                    isShowingPrompt = false;
                 }
             }
         }
-        else
+        else if (currentToken == null && !isShowingPrompt)
         {
-            if (interactionPrompt)
+            // Only hide the prompt if we're not interacting with a door
+            bool hidePrompt = true;
+            
+            // Check if there's a DoorInteraction component and it's showing a prompt
+            PlayerDoorInteraction doorInteraction = GetComponent<PlayerDoorInteraction>();
+            if (doorInteraction != null && doorInteraction.IsShowingPrompt())
             {
-                interactionPrompt.SetActive(false);
+                hidePrompt = false;
+            }
+            
+            if (hidePrompt && interactionManager != null)
+            {
+                interactionManager.HidePrompt();
             }
         }
+    }
+    
+    // Method to check if this component is currently showing a prompt
+    public bool IsShowingPrompt()
+    {
+        return isShowingPrompt;
     }
 }
