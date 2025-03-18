@@ -4105,6 +4105,7 @@ MonoBehaviour:
   cameraRotationSpeed: 30
   escapeSound: {fileID: 8300000, guid: 8aad901e51eca42269cd8ab9d8e5dc26, type: 3}
   escapeSoundVolume: 0.299
+  enemy: {fileID: 661905311}
 --- !u!1001 &968822335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4513,6 +4514,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: character
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9c9ec62a01d48924d86c244ce00b397b, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4520,6 +4525,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c9ec62a01d48924d86c244ce00b397b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1942299155}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c9ec62a01d48924d86c244ce00b397b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1942299156}
   m_SourcePrefab: {fileID: 100100000, guid: 9c9ec62a01d48924d86c244ce00b397b, type: 3}
 --- !u!1001 &1244826883
 PrefabInstance:
@@ -4775,6 +4783,8 @@ MonoBehaviour:
   coin_collect: {fileID: 8300000, guid: d81fa51784a67cc4f83363998cb224cf, type: 3}
   knocking: {fileID: 8300000, guid: 9601bc0a24fe55e47a3a0d890531a3c3, type: 3}
   escape: {fileID: 8300000, guid: 8aad901e51eca42269cd8ab9d8e5dc26, type: 3}
+  jump_scare_intro: {fileID: 8300000, guid: 57e70d02a71210347bc876755498aaad, type: 3}
+  jump_scare_scream: {fileID: 8300000, guid: 6ba3fa6f9925ef5468fe30c77c965353, type: 3}
   defaultSFXVolume: 1
 --- !u!4 &1273932966
 Transform:
@@ -4835,6 +4845,11 @@ MonoBehaviour:
   isLocked: 0
   openAngle: 90
   openSpeed: 2
+--- !u!4 &1349282352 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5393215578589016641, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+  m_PrefabInstance: {fileID: 1479062741}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1419323785
 GameObject:
   m_ObjectHideFlags: 0
@@ -5108,6 +5123,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1789129334}
+    - targetCorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1789129342}
+    - targetCorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1789129341}
+    - targetCorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1789129340}
   m_SourcePrefab: {fileID: 100100000, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
 --- !u!1 &1491390640
 GameObject:
@@ -5849,6 +5873,82 @@ MonoBehaviour:
     m_Bits: 256
   winManager: {fileID: 891171364}
   entranceDoor: {fileID: 1049585787}
+--- !u!54 &1789129340
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789129320}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &1789129341
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789129320}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Height: 2.5030503
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1789129342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789129320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff61a089135e00d42ae3840f3b607728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  winScreen: {fileID: 1562883811}
+  winMessageText: {fileID: 1986532607}
+  winDetailsText: {fileID: 1805696355}
+  restartButton: {fileID: 1684085420}
+  quitButton: {fileID: 1419323787}
+  spotlight: {fileID: 559090370}
+  entranceLight: {fileID: 1764986111}
+  enemy: {fileID: 1942299154}
+  jump_scare_intro: {fileID: 8300000, guid: 57e70d02a71210347bc876755498aaad, type: 3}
+  jump_scare_scream: {fileID: 8300000, guid: 6ba3fa6f9925ef5468fe30c77c965353, type: 3}
+  volume: 0.5
+  Camera: {fileID: 114953942}
+  Capsule: {fileID: 1349282352}
+  Flashlight: {fileID: 559090368}
 --- !u!1 &1805696353
 GameObject:
   m_ObjectHideFlags: 0
@@ -6117,6 +6217,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &1942299156
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942299153}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.659649, y: 2.5244102, z: 0.83398324}
+  m_Center: {x: 0.1701755, y: 0.76220536, z: -0.08300838}
 --- !u!1 &1950627673 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8604687846048078672, guid: beef3bcde1610f04aa96275436147bb9, type: 3}

@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - Door
   - Audio
+  - Enemy
   layers:
   - Default
   - TransparentFX
