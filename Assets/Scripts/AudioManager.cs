@@ -13,6 +13,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip coin_collect;
     public AudioClip knocking;
     public AudioClip escape;
+    public AudioClip jump_scare_intro;
+    public AudioClip jump_scare_scream;
 
     [Header("----- Volume Settings -----")]
     [Range(0f, 1f)]
