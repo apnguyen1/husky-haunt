@@ -5,7 +5,6 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI; // Required for NavMeshAgent
 
-
 public class GameWinManager : MonoBehaviour
 {
     [Header("UI References")]
@@ -24,6 +23,7 @@ public class GameWinManager : MonoBehaviour
     public AudioClip escapeSound;
     [Range(0f, 1f)]
     public float escapeSoundVolume = 0.5f; // Lower volume for escape sound
+    
     [Header("Enemy")]
     public GameObject enemy; // Assign the enemy GameObject in the Inspector
 
@@ -61,14 +61,32 @@ public class GameWinManager : MonoBehaviour
         }
     }
 
+    // This method can be called from the GameLoseCondition to enable UI elements
+    public void EnableRestartOptions()
+    {
+        // Make sure buttons are interactable
+        if (restartButton)
+        {
+            restartButton.interactable = true;
+        }
+        
+        if (quitButton)
+        {
+            quitButton.interactable = true;
+        }
+    }
+
     private IEnumerator PlayWinSequence()
     {
-        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
-
-        if (agent != null)
+        // Stop the enemy if it exists
+        if (enemy != null)
         {
-            agent.isStopped = true; // Stops the enemy from moving
-            agent.velocity = Vector3.zero; // Ensures it doesn't slide
+            NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.isStopped = true; // Stops the enemy from moving
+                agent.velocity = Vector3.zero; // Ensures it doesn't slide
+            }
         }
 
         // Stop background music
@@ -97,6 +115,13 @@ public class GameWinManager : MonoBehaviour
         if (playerController)
         {
             playerController.enabled = false;
+        }
+
+        // Disable mouse look script (Starter Assets)
+        var playerInput = GameObject.FindGameObjectWithTag("Player").GetComponent<StarterAssets.StarterAssetsInputs>();
+        if (playerInput)
+        {
+            playerInput.cursorInputForLook = false; // Stops mouse look processing
         }
 
         // Find the player camera for animations
@@ -188,6 +213,9 @@ public class GameWinManager : MonoBehaviour
 
     public void RestartGame()
     {
+        // Do not reset the lore status flag - we want it to remain shown
+        // LoreManager.ResetLoreStatus(); // This would make the lore show again
+        
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -197,7 +225,7 @@ public class GameWinManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
 }
