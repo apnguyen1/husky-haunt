@@ -52,7 +52,7 @@ public class GameLoseCondition : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.CompareTag("Enemy"))
         {
             print("Collided with the Enemy!");
             animator = other.gameObject.GetComponent<Animator>();
@@ -83,7 +83,7 @@ public class GameLoseCondition : MonoBehaviour
 
         // Wait a bit before showing the win screen
         audioManager.PlaySFXWithVolume(jump_scare_intro, volume);
-        yield return new WaitForSeconds(6.3f);
+        yield return new WaitForSeconds(1f);
 
         StartCoroutine(AnimateCamera(Camera, Capsule, Flashlight, enemy));
 
