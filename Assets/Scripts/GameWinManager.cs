@@ -23,7 +23,7 @@ public class GameWinManager : MonoBehaviour
     public AudioClip escapeSound;
     [Range(0f, 1f)]
     public float escapeSoundVolume = 0.5f; // Lower volume for escape sound
-    
+
     [Header("Enemy")]
     public GameObject enemy; // Assign the enemy GameObject in the Inspector
 
@@ -69,7 +69,7 @@ public class GameWinManager : MonoBehaviour
         {
             restartButton.interactable = true;
         }
-        
+
         if (quitButton)
         {
             quitButton.interactable = true;
@@ -215,7 +215,7 @@ public class GameWinManager : MonoBehaviour
     {
         // Do not reset the lore status flag - we want it to remain shown
         // LoreManager.ResetLoreStatus(); // This would make the lore show again
-        
+
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

@@ -4217,8 +4217,7 @@ MonoBehaviour:
 
 
     Time is running out. Run!'
-  playerController: {fileID: 1789129347}
-  mainCanvas: {fileID: 173083996}
+  enemyMovement: {fileID: 0}
 --- !u!1001 &968822335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6327,9 +6326,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff61a089135e00d42ae3840f3b607728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winScreen: {fileID: 1562883811}
-  winMessageText: {fileID: 1986532607}
-  winDetailsText: {fileID: 1805696355}
+  loseScreen: {fileID: 1562883811}
+  loseMessageText: {fileID: 1986532607}
+  loseDetailsText: {fileID: 1805696355}
   restartButton: {fileID: 1684085420}
   quitButton: {fileID: 1419323787}
   spotlight: {fileID: 559090370}
@@ -6341,11 +6340,6 @@ MonoBehaviour:
   Camera: {fileID: 114953942}
   Capsule: {fileID: 1349282352}
   Flashlight: {fileID: 559090368}
---- !u!143 &1789129347 stripped
-CharacterController:
-  m_CorrespondingSourceObject: {fileID: 8616685848737228382, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-  m_PrefabInstance: {fileID: 1479062741}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1805696353
 GameObject:
   m_ObjectHideFlags: 0

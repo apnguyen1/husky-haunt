@@ -13,7 +13,7 @@ public class GameLoseCondition : MonoBehaviour
     public TextMeshProUGUI loseDetailsText; // Renamed from winDetailsText
     public Button restartButton;
     public Button quitButton;
-    
+
     [Header("Scene References")]
     public Light spotlight;
     public Light entranceLight;
@@ -24,7 +24,7 @@ public class GameLoseCondition : MonoBehaviour
     public AudioClip jump_scare_scream;
     [Range(0f, 1f)]
     public float volume = 0.5f; // Volume for scare sounds
-    
+
     [Header("Camera Animation")]
     public Transform Camera;
     public Transform Capsule;
@@ -39,7 +39,7 @@ public class GameLoseCondition : MonoBehaviour
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         gameWinManager = FindObjectOfType<GameWinManager>();
-        
+
         // Hide the lose screen initially
         if (loseScreen)
         {
@@ -64,14 +64,14 @@ public class GameLoseCondition : MonoBehaviour
         {
             hasLost = true;
             Debug.Log("Collided with the Enemy!");
-            
+
             // Try to get the animator component
             animator = other.gameObject.GetComponent<Animator>();
             if (animator != null)
             {
                 animator.SetBool("isScreaming", true);
             }
-            
+
             StartCoroutine(PlayLoseSequence());
         }
     }
@@ -101,7 +101,7 @@ public class GameLoseCondition : MonoBehaviour
         {
             audioManager.PlaySFXWithVolume(jump_scare_intro, volume);
         }
-        
+
         // Short wait for dramatic effect
         yield return new WaitForSeconds(1f);
 
@@ -152,7 +152,7 @@ public class GameLoseCondition : MonoBehaviour
     private IEnumerator AnimateCamera(Transform camera, Transform body, Transform light, Transform enemy)
     {
         // Calculate the new camera position in front of the enemy
-        Vector3 newPosition = enemy.position + enemy.forward * 1.2f;
+        Vector3 newPosition = enemy.position + enemy.forward * 1.3f;
 
         // Move the camera
         camera.position = new Vector3(newPosition.x, newPosition.y + 1.1f, newPosition.z);
@@ -165,7 +165,7 @@ public class GameLoseCondition : MonoBehaviour
 
         // Turn the spotlight back on for dramatic effect
         if (spotlight != null) spotlight.enabled = true;
-        
+
         // Play the jump scare scream
         if (audioManager != null && jump_scare_scream != null)
         {
@@ -187,6 +187,7 @@ public class GameLoseCondition : MonoBehaviour
         // Do not reset lore status - we want it to stay shown on restarts
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Cursor.visible = false;
     }
 
     public void QuitGame()
