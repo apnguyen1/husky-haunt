@@ -5,7 +5,7 @@ using System.Collections;
 public class EnemyMovement : MonoBehaviour
 {
     public Transform player;
-    public float delayBeforeSpawn = 5f; // Delay in seconds before spawning
+    public float delayBeforeSpawn = 19f; // Default delay in seconds before spawning
     public Transform spawnPoint; // Optional specific spawn location
     
     [Header("Audio")]
@@ -30,6 +30,14 @@ public class EnemyMovement : MonoBehaviour
         // Disable enemy initially
         SetEnemyActive(false);
         
+        // LoreManager will adjust this delay in its Start method
+        // If missing LoreManager, adjust delay here based on static property
+        LoreManager loreManager = FindObjectOfType<LoreManager>();
+        if (loreManager == null && LoreManager.HasLoreBeenShown)
+        {
+            delayBeforeSpawn = 5f; // Shorter delay for subsequent playthroughs
+        }
+        
         // Start delayed spawn
         StartCoroutine(SpawnAfterDelay());
     }
@@ -45,6 +53,7 @@ public class EnemyMovement : MonoBehaviour
     
     private IEnumerator SpawnAfterDelay()
     {
+        
         // Wait for the specified delay
         yield return new WaitForSeconds(delayBeforeSpawn);
         
@@ -58,6 +67,7 @@ public class EnemyMovement : MonoBehaviour
         if (playKnockingSound && audioManager != null)
         {
             audioManager.PlaySFX(audioManager.knocking);
+            Debug.Log("Knocking sound played");
         }
         
         // Wait a moment after the knocking sound
@@ -65,9 +75,10 @@ public class EnemyMovement : MonoBehaviour
         
         // Activate the enemy
         SetEnemyActive(true);
+        Debug.Log("Enemy activated");
     }
     
-    private void SetEnemyActive(bool active)
+    public void SetEnemyActive(bool active)
     {
         isActive = active;
         
@@ -88,5 +99,28 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.enabled = active;
         }
+    }
+    
+    // Method to force-activate the enemy (can be called from other scripts)
+    public void ActivateEnemy()
+    {
+        StopAllCoroutines();
+        
+        // If we have a specific spawn point, move the enemy there
+        if (spawnPoint != null)
+        {
+            transform.position = spawnPoint.position;
+        }
+        
+        SetEnemyActive(true);
+        Debug.Log("Enemy forcibly activated");
+    }
+    
+    // Method to reset the enemy (for restarting)
+    public void ResetEnemy()
+    {
+        StopAllCoroutines();
+        SetEnemyActive(false);
+        StartCoroutine(SpawnAfterDelay());
     }
 }
